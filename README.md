@@ -301,43 +301,31 @@ git add .
 git commit -m "feat: complete YottaFlex smart manufacturing scheduling system with 10 entities, CP-SAT solver, validator, and tests"
 
 # 4. Link your remote public GitHub repository
-git remote add origin https://github.com/<your-username>/<your-repo-name>.git
+git remote add origin https://github.com/madhumitha81-coder/Smart-Manufacturing-Production-Scheduling-System.git
 
 # 5. Push to main branch
 git branch -M main
 git push -u origin main
 ```
-'''
-. Main Pipeline (Full Dataset + PostgreSQL Sync)
 
-Runs the entire scheduling engine on 100 products, 40 machines, 500 orders, 2,000 operations, 200 materials and syncs to PostgreSQL:
+---
 
-powershell
+## 10. Quick Execution Commands
+
+```powershell
+# 1. Run the Full Production Pipeline (with PostgreSQL Sync)
 python main.py --mode full --postgres
-2. Interactive Web Dashboard (Streamlit)
 
-Launches the interactive visual Gantt schedule, inventory tracker, and constraint auditor in your browser at http://localhost:8501:
-
-powershell
-streamlit run streamlit_app.py
-3. Run the Automated Test Suite (Pytest)
-
-Runs all 15 unit and integration tests (tests schemas, CP-SAT solver, precedence, and all 5 negative edge cases):
-
-powershell
+# 2. Run the Full Automated Test Suite (15/15 tests)
 pytest -v
-4. Fast Starter Test (1-Second Run)
 
-Runs a quick test using the smaller starter dataset (10 products, 14 machines, 25 orders, 100 operations):
+# 3. Run the Comprehensive 7-Point System Audit
+python verify_system.py
 
-powershell
-python main.py --mode starter
-5. Verify Fixed Seed Reproducibility
+# 4. Launch the Interactive Streamlit Web Dashboard
+streamlit run streamlit_app.py
+```
 
-Verifies that generating twice with seed 20261022 produces bitwise identical MD5 checksums:
+### GitHub Repository
+🔗 **[Smart-Manufacturing-Production-Scheduling-System](https://github.com/madhumitha81-coder/Smart-Manufacturing-Production-Scheduling-System)**
 
-powershell
-python -c "from src.data_generator import DataGenerator, FIXED_SEED; import hashlib; d1 = DataGenerator('starter', FIXED_SEED).generate_all(); d2 = DataGenerator('starter', FIXED_SEED).generate_all(); [hashlib.md5(d1[k].to_csv(index=False).encode()).hexdigest() == hashlib.md5(d2[k].to_csv(index=False).encode()).hexdigest() for k in d1]; print('Reproducibility confirmed: 100% matching checksums!')"
-'''
-git code
-https://github.com/madhumitha81-coder/Smart-Manufacturing-Production-Scheduling-System
