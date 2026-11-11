@@ -1,89 +1,89 @@
 {
-  "pipeline_completed_at": "2026-11-11T12:19:51.461615",
+  "pipeline_completed_at": "2026-11-11T12:29:55.970200",
   "fixed_seed": 20261022,
-  "mode": "starter",
+  "mode": "full",
   "record_counts": {
-    "products": 10,
-    "routings": 10,
-    "operations": 100,
-    "machines": 14,
-    "machine_calendar": 596,
-    "materials": 20,
-    "inventory_lots": 50,
-    "production_orders": 25,
+    "products": 100,
+    "routings": 100,
+    "operations": 2000,
+    "machines": 40,
+    "machine_calendar": 5484,
+    "materials": 200,
+    "inventory_lots": 512,
+    "production_orders": 500,
     "changeover_matrix": 125,
-    "operation_schedule": 100,
+    "operation_schedule": 2000,
     "ground_truth": 10
   },
   "metrics": {
-    "makespan_hours": 190.28,
-    "makespan_days": 7.93,
-    "earliest_start": "2026-11-04T10:00:00",
-    "latest_end": "2026-11-12T08:17:00",
-    "total_orders": 25,
-    "orders_scheduled": 25,
-    "on_time_orders": 20,
-    "on_time_delivery_pct": 80.0,
-    "delayed_orders": 5,
-    "average_lateness_hours": 5.21,
-    "maximum_lateness_hours": 34.85,
-    "productive_utilization_pct": 3.78,
-    "changeover_pct": 1.16,
-    "idle_pct": 95.06,
-    "total_operating_cost_usd": 20409.9,
+    "makespan_hours": 1778.35,
+    "makespan_days": 74.1,
+    "earliest_start": "2026-11-02T06:00:00",
+    "latest_end": "2027-01-15T08:21:00",
+    "total_orders": 500,
+    "orders_scheduled": 500,
+    "on_time_orders": 105,
+    "on_time_delivery_pct": 21.0,
+    "delayed_orders": 395,
+    "average_lateness_hours": 397.29,
+    "maximum_lateness_hours": 1293.55,
+    "productive_utilization_pct": 8.09,
+    "changeover_pct": 1.84,
+    "idle_pct": 90.07,
+    "total_operating_cost_usd": 382705.88,
     "workcenter_breakdown": {
       "ASSEMBLY_LINE": {
-        "operations_count": 15,
-        "total_run_hours": 15.2,
-        "total_setup_hours": 7.0
+        "operations_count": 300,
+        "total_run_hours": 321.5,
+        "total_setup_hours": 83.2
       },
       "CNC_MACHINING": {
-        "operations_count": 10,
-        "total_run_hours": 12.1,
-        "total_setup_hours": 4.0
+        "operations_count": 200,
+        "total_run_hours": 213.1,
+        "total_setup_hours": 0.0
       },
       "CUTTING_BAY": {
-        "operations_count": 20,
-        "total_run_hours": 18.1,
-        "total_setup_hours": 9.5
+        "operations_count": 400,
+        "total_run_hours": 351.0,
+        "total_setup_hours": 143.5
       },
       "DRILL_PRESS": {
-        "operations_count": 5,
-        "total_run_hours": 5.3,
+        "operations_count": 100,
+        "total_run_hours": 113.0,
         "total_setup_hours": 0.0
       },
       "QUALITY_LAB": {
-        "operations_count": 20,
-        "total_run_hours": 29.1,
-        "total_setup_hours": 5.5
+        "operations_count": 400,
+        "total_run_hours": 575.3,
+        "total_setup_hours": 116.5
       },
       "SURFACE_FINISH": {
-        "operations_count": 20,
-        "total_run_hours": 26.9,
-        "total_setup_hours": 9.0
+        "operations_count": 400,
+        "total_run_hours": 525.8,
+        "total_setup_hours": 159.8
       },
       "THERMAL_CELL": {
-        "operations_count": 10,
-        "total_run_hours": 11.9,
-        "total_setup_hours": 1.5
+        "operations_count": 200,
+        "total_run_hours": 231.4,
+        "total_setup_hours": 27.0
       }
     }
   },
   "evaluation_scores": {
     "ground_truth_count": 10,
-    "detected_count": 11,
+    "detected_count": 10,
     "true_positives": 10,
-    "false_positives": 1,
+    "false_positives": 0,
     "false_negatives": 0,
-    "precision": 0.9091,
+    "precision": 1.0,
     "recall": 1.0,
-    "f1_score": 0.9524,
+    "f1_score": 1.0,
     "category_breakdown": {
       "MACHINE_OVERLAP": {
         "ground_truth": 2,
-        "detected": 3,
+        "detected": 2,
         "true_positives": 2,
-        "precision": 0.6667,
+        "precision": 1.0,
         "recall": 1.0
       },
       "PRECEDENCE_VIOLATION": {
