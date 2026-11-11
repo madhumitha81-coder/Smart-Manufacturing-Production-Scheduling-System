@@ -40,7 +40,75 @@ In high-mix, discrete manufacturing facilities (e.g., aerospace precision alloys
 
 ---
 
-## 2. System Architecture & 10 Core Entities
+## 2. 3-Tier Architecture
+
+YottaFlex is built as a full **3-Tier Architecture** — a production-grade system with a clear separation between the user interface, business logic, and persistent data storage.
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                     TIER 1 — FRONTEND (UI Layer)                    │
+│                                                                     │
+│  ┌──────────────────────────┐   ┌─────────────────────────────────┐ │
+│  │   React.js SaaS Dashboard│   │  Streamlit Interactive Dashboard │ │
+│  │   (Vite · 7 Pages)       │   │  (streamlit_app.py · Port 8501) │ │
+│  │   frontend/              │   │                                 │ │
+│  │   • Dashboard            │   │  • Interactive Gantt Chart      │ │
+│  │   • Orders               │   │  • Constraint Violations View   │ │
+│  │   • Machines             │   │  • Material & Inventory Panel   │ │
+│  │   • Scheduling / Gantt   │   │  • Machine Calendar & Shifts    │ │
+│  │   • Inventory            │   │  • Ground Truth Confusion Matrix│ │
+│  │   • Validation           │   │                                 │ │
+│  │   • Reports              │   │                                 │ │
+│  └──────────────────────────┘   └─────────────────────────────────┘ │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+┌──────────────────────────────────▼──────────────────────────────────┐
+│                   TIER 2 — BACKEND (Business Logic Layer)            │
+│                                                                     │
+│   main.py ──► Unified CLI Pipeline Entrypoint                       │
+│                                                                     │
+│   src/models.py           → Pydantic Schemas & 10 Entity Definitions│
+│   src/data_generator.py   → Deterministic Synthetic Data (seed)     │
+│   src/scheduler.py        → Heuristic Dispatch + CP-SAT Solver      │
+│   src/constraint_validator.py → Independent Anomaly Auditor (F1=100)│
+│   src/material_manager.py → FIFO Inventory Lot Allocation           │
+│   src/metrics.py          → Makespan, OTD, Cost & Utilization KPIs  │
+│   src/visualization.py    → Gantt Chart & Dashboard Renderer        │
+│   src/db_postgres.py      → PostgreSQL DDL, Schema & Bulk Sync      │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+┌──────────────────────────────────▼──────────────────────────────────┐
+│                   TIER 3 — DATABASE (Persistence Layer)              │
+│                                                                     │
+│  ┌─────────────────────────────┐  ┌──────────────────────────────┐  │
+│  │  PostgreSQL 16+             │  │  SQLite (Local Dev / CI)     │  │
+│  │  Database: smart_mfg_aps   │  │  data/factory_schedule.db    │  │
+│  │  12 Tables · PK/FK · Index │  │  Same 10 entities & schema   │  │
+│  │  • products                │  │                              │  │
+│  │  • routings                │  │  CSV Exports (data/*.csv)    │  │
+│  │  • operations              │  │  • 10 entity CSV files       │  │
+│  │  • machines                │  │  • ground_truth.csv          │  │
+│  │  • machine_calendar        │  │  • manifest.json             │  │
+│  │  • materials               │  │                              │  │
+│  │  • inventory_lots          │  └──────────────────────────────┘  │
+│  │  • production_orders       │                                     │
+│  │  • operation_schedule      │                                     │
+│  │  • changeover_matrix       │                                     │
+│  │  • ground_truth            │                                     │
+│  │  • schedule_violations     │                                     │
+│  └─────────────────────────────┘                                    │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+| Tier | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend** | React.js (Vite) + Streamlit | Interactive dashboards, Gantt charts, data visualization |
+| **Backend** | Python 3.12 · OR-Tools · Pydantic | Scheduling engine, constraint validation, data generation |
+| **Database** | PostgreSQL 16 + SQLite + CSV | Persistent relational storage with PK/FK integrity |
+
+---
+
+## 3. System Architecture & 10 Core Entities
 
 YottaFlex maintains strict relational integrity across 10 core entities, adhering to enterprise ERP/MES conventions.
 
