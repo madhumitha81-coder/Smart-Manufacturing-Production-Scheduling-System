@@ -21,8 +21,33 @@ st.markdown("Advanced Planning & Scheduling (APS) respecting routing, capacity, 
 
 # Sidebar Controls
 st.sidebar.header("📁 Data Source & Configuration")
+backend_choice = st.sidebar.selectbox("Data Backend", ["PostgreSQL Database", "Local CSV / SQLite"])
 data_dir = st.sidebar.text_input("Data Directory", value="data")
 outputs_dir = st.sidebar.text_input("Outputs Directory", value="outputs")
+
+if backend_choice == "PostgreSQL Database":
+    st.sidebar.markdown("##### PostgreSQL Connection")
+    pg_host = st.sidebar.text_input("Host", value="localhost")
+    pg_port = st.sidebar.number_input("Port", value=5432)
+    pg_user = st.sidebar.text_input("User", value="postgres")
+    pg_pass = st.sidebar.text_input("Password", value="madhumitha@81", type="password")
+    pg_db = st.sidebar.text_input("Database", value="smart_manufacturing_aps")
+
+@st.cache_data
+def load_postgres_data(host, port, user, password, dbname):
+    import psycopg2
+    data = {}
+    try:
+        conn = psycopg2.connect(host=host, port=port, user=user, password=password, dbname=dbname)
+        cur = conn.cursor()
+        cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
+        tables = [r[0] for r in cur.fetchall()]
+        for t in tables:
+            data[t] = pd.read_sql(f"SELECT * FROM {t};", conn)
+        conn.close()
+    except Exception as e:
+        st.error(f"PostgreSQL connection error: {e}")
+    return data
 
 # Helper to load CSVs safely
 @st.cache_data
@@ -57,8 +82,23 @@ def load_outputs(directory: str):
             outputs["metrics"] = json.load(f)
     return outputs
 
-data = load_data(data_dir)
-outputs = load_outputs(outputs_dir)
+if backend_choice == "PostgreSQL Database":
+    pg_data = load_postgres_data(pg_host, pg_port, pg_user, pg_pass, pg_db)
+    if pg_data:
+        data = pg_data
+        # Map table names to match CSV conventions if needed
+        outputs = load_outputs(outputs_dir)
+        if "operation_schedule" in data:
+            outputs["schedule"] = data["operation_schedule"]
+        if "schedule_violations" in data:
+            outputs["violations"] = data["schedule_violations"]
+    else:
+        st.warning("Could not connect to PostgreSQL. Falling back to local CSV files.")
+        data = load_data(data_dir)
+        outputs = load_outputs(outputs_dir)
+else:
+    data = load_data(data_dir)
+    outputs = load_outputs(outputs_dir)
 
 # Top KPI Summary Cards
 metrics = outputs.get("metrics", {})
@@ -203,3 +243,4 @@ with tab5:
     if table_choice in data and not data[table_choice].empty:
         st.dataframe(data[table_choice], use_container_width=True)
         st.caption(f"Total Rows: {len(data[table_choice])}")
+

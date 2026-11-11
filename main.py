@@ -24,6 +24,7 @@ def run_pipeline(
     seed: int = FIXED_SEED,
     data_dir: str = "data",
     outputs_dir: str = "outputs",
+    sync_postgres: bool = False,
 ):
     print("=" * 75)
     print("  YottaFlex Smart Manufacturing: Production Scheduling Engine")
@@ -176,6 +177,18 @@ def run_pipeline(
     schedules_df.to_csv(os.path.join(outputs_dir, "schedule.csv"), index=False)
     test_violations.to_csv(os.path.join(outputs_dir, "violations.csv"), index=False)
 
+    # Sync to PostgreSQL if requested
+    if sync_postgres:
+        print("\n>>> STEP 7b: Syncing to PostgreSQL Database (smart_manufacturing_aps)...")
+        from src.db_postgres import PostgresManager, export_postgres_sql_file
+        export_postgres_sql_file(os.path.join(data_dir, "schema_postgres.sql"))
+        pg_mgr = PostgresManager()
+        pg_mgr.init_schema()
+        pg_counts = pg_mgr.sync_data(data_dir=data_dir, outputs_dir=outputs_dir)
+        print("    [+] PostgreSQL Synchronization Complete:")
+        for tbl, cnt in pg_counts.items():
+            print(f"        * {tbl:<22}: {cnt} rows")
+
     # -------------------------------------------------------------------------
     # STEP 8: Rendering Executive Dashboard Image
     # -------------------------------------------------------------------------
@@ -217,6 +230,7 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=FIXED_SEED, help="Deterministic random seed")
     parser.add_argument("--data-dir", type=str, default="data", help="Directory to save generated CSVs and DB")
     parser.add_argument("--outputs-dir", type=str, default="outputs", help="Directory to save outputs and plots")
+    parser.add_argument("--postgres", action="store_true", help="Sync schema and data to local PostgreSQL database")
     args = parser.parse_args()
 
     run_pipeline(
@@ -224,4 +238,6 @@ if __name__ == "__main__":
         seed=args.seed,
         data_dir=args.data_dir,
         outputs_dir=args.outputs_dir,
+        sync_postgres=args.postgres,
     )
+

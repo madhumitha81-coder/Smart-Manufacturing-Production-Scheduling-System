@@ -171,3 +171,4 @@ Known injected edge-case anomalies for objective scoring of the `ConstraintValid
 | `machine_id` | String | Required | Valid `machine_id` | N/A | Machine asset affected. |
 | `description` | String | Required | Human-readable explanation | N/A | Explains the physical violation injected. |
 | `expected_flag` | String | Required | Exact validator flag token | N/A | Expected category string emitted by auditor. |
+

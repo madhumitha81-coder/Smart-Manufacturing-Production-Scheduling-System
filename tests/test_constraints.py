@@ -94,3 +94,4 @@ def test_anomaly_evaluation_metrics(setup_validation):
     assert eval_res["recall"] >= 0.90, f"Recall too low: {eval_res['recall']}"
     assert eval_res["precision"] >= 0.90, f"Precision too low: {eval_res['precision']}"
     assert eval_res["f1_score"] >= 0.90, f"F1 score too low: {eval_res['f1_score']}"
+

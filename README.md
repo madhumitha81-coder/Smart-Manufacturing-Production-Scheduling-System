@@ -1,9 +1,10 @@
 # YottaFlex: Smart Manufacturing Production Scheduling System
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-blue.svg)](https://www.postgresql.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![OR-Tools](https://img.shields.io/badge/Google-OR--Tools-orange.svg)](https://developers.google.com/optimization)
-[![Tests: 14 Passed](https://img.shields.io/badge/Tests-14%20Passed-brightgreen.svg)]()
+[![Tests: 15 Passed](https://img.shields.io/badge/Tests-15%20Passed-brightgreen.svg)]()
 [![Precision: 100%](https://img.shields.io/badge/Precision-100%25-success.svg)]()
 [![Recall: 100%](https://img.shields.io/badge/Recall-100%25-success.svg)]()
 
@@ -191,8 +192,8 @@ YottaFlex/
 
 ### Step 1: Clone Repository & Install Dependencies
 ```bash
-git clone <YOUR_PUBLIC_GITHUB_REPO_URL>
-cd YottaFlex
+git clone https://github.com/madhumitha81-coder/Smart-Manufacturing-Production-Scheduling-System.git
+cd Smart-Manufacturing-Production-Scheduling-System
 python -m pip install -r requirements.txt
 ```
 
@@ -203,22 +204,56 @@ python -m pip install -r requirements.txt
 python main.py --mode starter
 ```
 
-**Full Mode (Required volume: 100 products, 40 machines, 500 orders, 2,000 operations, 200 materials):**
+**Full Mode with PostgreSQL Synchronization:**
 ```bash
-python main.py --mode full --seed 20261022
+python main.py --mode full --postgres
 ```
+This automatically:
+1. Generates the full dataset (100 SKUs, 40 machines, 500 orders, 2,000 operations, 200 materials).
+2. Provisions the PostgreSQL schema (`smart_manufacturing_aps`) with primary keys, foreign keys, and indexes.
+3. Bulk loads all 12 tables directly into your PostgreSQL server.
+4. Audits constraints and saves reports to `outputs/`.
 
-### Step 3: Run Automated Test Suite
+---
+
+## 8. PostgreSQL & VS Code Integration
+
+The project includes first-class PostgreSQL integration (`src/db_postgres.py`) configured for local development:
+
+- **Host**: `localhost`
+- **Port**: `5432`
+- **User**: `postgres`
+- **Password**: `madhumitha@81`
+- **Database**: `smart_manufacturing_aps`
+- **SQL DDL Script**: [`data/schema_postgres.sql`](data/schema_postgres.sql)
+
+### Using PostgreSQL in VS Code
+1. Install the **PostgreSQL** extension in VS Code (e.g., `Chris Kolkman` or `Weijan Chen`).
+2. Add a new connection:
+   - Host: `localhost`
+   - Port: `5432`
+   - User: `postgres`
+   - Password: `madhumitha@81`
+   - Database: `smart_manufacturing_aps`
+3. Expand tables to explore:
+   - `products`, `routings`, `operations`, `machines`, `machine_calendar`, `materials`, `inventory_lots`, `production_orders`, `operation_schedule`, `changeover_matrix`, `ground_truth`, and `schedule_violations`.
+4. Open [`data/schema_postgres.sql`](data/schema_postgres.sql) to review and execute DDL scripts directly.
+
+---
+
+## 9. Automated Test Suite
+
 ```bash
 pytest -v
 ```
-All 14 unit and integration tests will execute and pass:
+All 15 unit and integration tests will execute and pass:
 - PK/FK referential integrity
-- Arithmetic reconciliation
+- Arithmetic reconciliation (`Available + Allocated == Initial`)
 - Fixed-seed reproducibility
 - Machine eligibility & operation precedence
 - CP-SAT solver functionality
 - All 5 constraint violation edge cases
+- **PostgreSQL live database connectivity & table validation**
 
 ### Step 4: Launch Interactive Streamlit Dashboard
 ```bash
@@ -272,3 +307,4 @@ git remote add origin https://github.com/<your-username>/<your-repo-name>.git
 git branch -M main
 git push -u origin main
 ```
+

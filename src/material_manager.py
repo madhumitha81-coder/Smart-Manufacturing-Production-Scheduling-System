@@ -96,3 +96,4 @@ class MaterialManager:
     def get_allocation_audit_log(self) -> pd.DataFrame:
         """Returns complete audit trail of material allocations."""
         return pd.DataFrame(self.allocation_log)
+

@@ -120,3 +120,4 @@ class MetricsCalculator:
             "total_operating_cost_usd": total_operating_cost,
             "workcenter_breakdown": wc_summary,
         }
+

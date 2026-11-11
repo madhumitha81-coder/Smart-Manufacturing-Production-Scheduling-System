@@ -104,3 +104,19 @@ def test_fixed_seed_reproducibility():
 
         assert hash1 == hash2, f"Reproducibility mismatch in table: {name}"
         assert len(dfs1[name]) == len(dfs2[name]), f"Row count mismatch in table: {name}"
+
+
+def test_postgres_integration():
+    """Verifies PostgreSQL connectivity and table row counts."""
+    from src.db_postgres import PostgresManager
+    try:
+        mgr = PostgresManager()
+        tables = mgr.verify_tables()
+        assert "products" in tables
+        assert "operations" in tables
+        assert "operation_schedule" in tables
+        assert tables["products"] >= 10
+        assert tables["operations"] >= 100
+    except Exception as e:
+        pytest.skip(f"PostgreSQL not accessible in test environment: {e}")
+

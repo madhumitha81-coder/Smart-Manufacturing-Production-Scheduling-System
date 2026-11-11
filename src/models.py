@@ -219,3 +219,4 @@ class ScheduleViolation(BaseModel):
     severity: str  # HARD or WARNING
     details: str
     timestamp: str
+

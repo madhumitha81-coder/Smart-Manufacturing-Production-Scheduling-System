@@ -370,3 +370,4 @@ class ConstraintValidator:
             "f1_score": round(f1, 4),
             "category_breakdown": category_breakdown,
         }
+
