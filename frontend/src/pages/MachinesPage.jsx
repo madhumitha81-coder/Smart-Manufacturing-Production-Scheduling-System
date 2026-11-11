@@ -318,3 +318,4 @@ export default function MachinesPage({ machines }) {
     </div>
   );
 }
+
