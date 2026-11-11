@@ -87,12 +87,14 @@ def audit_system():
 
     # 6. PostgreSQL Database
     print("\n[6/7] Auditing Live PostgreSQL Connection & Tables...")
+    from dotenv import load_dotenv
+    load_dotenv()
     conn = psycopg2.connect(
-        host="localhost",
-        port=5432,
-        user="postgres",
-        password="madhumitha@81",
-        dbname="smart_manufacturing_aps",
+        host=os.getenv("PGHOST", "localhost"),
+        port=int(os.getenv("PGPORT", 5432)),
+        user=os.getenv("PGUSER", "postgres"),
+        password=os.getenv("PGPASSWORD", "postgres"),
+        dbname=os.getenv("PGDATABASE", "smart_manufacturing_aps"),
     )
     cur = conn.cursor()
     cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = %s ORDER BY table_name;", ("public",))

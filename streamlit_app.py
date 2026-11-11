@@ -20,6 +20,9 @@ st.title("🏭 YottaFlex: Smart Manufacturing Production Scheduling System")
 st.markdown("Advanced Planning & Scheduling (APS) respecting routing, capacity, changeovers, labor shifts, and materials.")
 
 # Sidebar Controls
+from dotenv import load_dotenv
+load_dotenv()
+
 st.sidebar.header("📁 Data Source & Configuration")
 backend_choice = st.sidebar.selectbox("Data Backend", ["PostgreSQL Database", "Local CSV / SQLite"])
 data_dir = st.sidebar.text_input("Data Directory", value="data")
@@ -27,11 +30,11 @@ outputs_dir = st.sidebar.text_input("Outputs Directory", value="outputs")
 
 if backend_choice == "PostgreSQL Database":
     st.sidebar.markdown("##### PostgreSQL Connection")
-    pg_host = st.sidebar.text_input("Host", value="localhost")
-    pg_port = st.sidebar.number_input("Port", value=5432)
-    pg_user = st.sidebar.text_input("User", value="postgres")
-    pg_pass = st.sidebar.text_input("Password", value="madhumitha@81", type="password")
-    pg_db = st.sidebar.text_input("Database", value="smart_manufacturing_aps")
+    pg_host = st.sidebar.text_input("Host", value=os.getenv("PGHOST", "localhost"))
+    pg_port = st.sidebar.number_input("Port", value=int(os.getenv("PGPORT", 5432)))
+    pg_user = st.sidebar.text_input("User", value=os.getenv("PGUSER", "postgres"))
+    pg_pass = st.sidebar.text_input("Password", value=os.getenv("PGPASSWORD", ""), type="password")
+    pg_db = st.sidebar.text_input("Database", value=os.getenv("PGDATABASE", "smart_manufacturing_aps"))
 
 @st.cache_data
 def load_postgres_data(host, port, user, password, dbname):

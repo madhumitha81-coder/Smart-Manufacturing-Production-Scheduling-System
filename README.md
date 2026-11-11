@@ -218,13 +218,13 @@ This automatically:
 
 ## 8. PostgreSQL & VS Code Integration
 
-The project includes first-class PostgreSQL integration (`src/db_postgres.py`) configured for local development:
+The project includes first-class PostgreSQL integration (`src/db_postgres.py`) configured for local development via environment variables:
 
-- **Host**: `localhost`
-- **Port**: `5432`
-- **User**: `postgres`
-- **Password**: `madhumitha@81`
-- **Database**: `smart_manufacturing_aps`
+- **Host**: `localhost` (or `PGHOST`)
+- **Port**: `5432` (or `PGPORT`)
+- **User**: `postgres` (or `PGUSER`)
+- **Password**: Configured securely via `.env` or `PGPASSWORD` (see `.env.example`)
+- **Database**: `smart_manufacturing_aps` (or `PGDATABASE`)
 - **SQL DDL Script**: [`data/schema_postgres.sql`](data/schema_postgres.sql)
 
 ### Using PostgreSQL in VS Code
@@ -233,7 +233,7 @@ The project includes first-class PostgreSQL integration (`src/db_postgres.py`) c
    - Host: `localhost`
    - Port: `5432`
    - User: `postgres`
-   - Password: `madhumitha@81`
+   - Password: `<your_postgres_password>`
    - Database: `smart_manufacturing_aps`
 3. Expand tables to explore:
    - `products`, `routings`, `operations`, `machines`, `machine_calendar`, `materials`, `inventory_lots`, `production_orders`, `operation_schedule`, `changeover_matrix`, `ground_truth`, and `schedule_violations`.

@@ -6,15 +6,18 @@ and SQL query verification for PostgreSQL.
 
 import os
 from typing import Dict, Optional
+from dotenv import load_dotenv
 import pandas as pd
 import psycopg2
 from psycopg2.extras import execute_batch
+
+load_dotenv()
 
 DEFAULT_PG_CONFIG = {
     "host": os.environ.get("PGHOST", "localhost"),
     "port": int(os.environ.get("PGPORT", 5432)),
     "user": os.environ.get("PGUSER", "postgres"),
-    "password": os.environ.get("PGPASSWORD", "madhumitha@81"),
+    "password": os.environ.get("PGPASSWORD", "postgres"),
     "dbname": os.environ.get("PGDATABASE", "smart_manufacturing_aps"),
 }
 
