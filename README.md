@@ -307,4 +307,37 @@ git remote add origin https://github.com/<your-username>/<your-repo-name>.git
 git branch -M main
 git push -u origin main
 ```
+'''
+. Main Pipeline (Full Dataset + PostgreSQL Sync)
 
+Runs the entire scheduling engine on 100 products, 40 machines, 500 orders, 2,000 operations, 200 materials and syncs to PostgreSQL:
+
+powershell
+python main.py --mode full --postgres
+2. Interactive Web Dashboard (Streamlit)
+
+Launches the interactive visual Gantt schedule, inventory tracker, and constraint auditor in your browser at http://localhost:8501:
+
+powershell
+streamlit run streamlit_app.py
+3. Run the Automated Test Suite (Pytest)
+
+Runs all 15 unit and integration tests (tests schemas, CP-SAT solver, precedence, and all 5 negative edge cases):
+
+powershell
+pytest -v
+4. Fast Starter Test (1-Second Run)
+
+Runs a quick test using the smaller starter dataset (10 products, 14 machines, 25 orders, 100 operations):
+
+powershell
+python main.py --mode starter
+5. Verify Fixed Seed Reproducibility
+
+Verifies that generating twice with seed 20261022 produces bitwise identical MD5 checksums:
+
+powershell
+python -c "from src.data_generator import DataGenerator, FIXED_SEED; import hashlib; d1 = DataGenerator('starter', FIXED_SEED).generate_all(); d2 = DataGenerator('starter', FIXED_SEED).generate_all(); [hashlib.md5(d1[k].to_csv(index=False).encode()).hexdigest() == hashlib.md5(d2[k].to_csv(index=False).encode()).hexdigest() for k in d1]; print('Reproducibility confirmed: 100% matching checksums!')"
+'''
+git code
+https://github.com/madhumitha81-coder/Smart-Manufacturing-Production-Scheduling-System
