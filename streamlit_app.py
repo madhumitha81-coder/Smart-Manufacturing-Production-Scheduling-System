@@ -43,7 +43,10 @@ def load_postgres_data(host, port, user, password, dbname):
         cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
         tables = [r[0] for r in cur.fetchall()]
         for t in tables:
-            data[t] = pd.read_sql(f"SELECT * FROM {t};", conn)
+            cur.execute(f"SELECT * FROM {t};")
+            rows = cur.fetchall()
+            col_names = [desc[0] for desc in cur.description]
+            data[t] = pd.DataFrame(rows, columns=col_names)
         conn.close()
     except Exception as e:
         st.error(f"PostgreSQL connection error: {e}")
@@ -159,7 +162,7 @@ with tab1:
             )
             fig.update_yaxes(categoryorder="category ascending")
             fig.update_layout(height=650)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         else:
             st.info("No operations match the selected filter criteria.")
     else:
@@ -175,14 +178,14 @@ with tab2:
     with col_a:
         st.markdown("#### Detected Violations by Auditor")
         if not viol_df.empty:
-            st.dataframe(viol_df[["violation_id", "violation_category", "schedule_id", "machine_id", "details"]], use_container_width=True)
+            st.dataframe(viol_df[["violation_id", "violation_category", "schedule_id", "machine_id", "details"]], width="stretch")
         else:
             st.success("No constraint violations detected in baseline schedule!")
 
     with col_b:
         st.markdown("#### Injected Ground Truth Anomalies (Test Set)")
         if not gt_df.empty:
-            st.dataframe(gt_df[["anomaly_id", "anomaly_category", "target_schedule_id", "machine_id", "description"]], use_container_width=True)
+            st.dataframe(gt_df[["anomaly_id", "anomaly_category", "target_schedule_id", "machine_id", "description"]], width="stretch")
         else:
             st.info("Ground truth anomalies empty or not loaded.")
 
@@ -212,7 +215,7 @@ with tab3:
 
     if not lots_df.empty and not mats_df.empty:
         merged_lots = pd.merge(lots_df, mats_df[["material_id", "material_name", "material_category", "unit_of_measure"]], on="material_id", how="left")
-        st.dataframe(merged_lots, use_container_width=True)
+        st.dataframe(merged_lots, width="stretch")
 
         # Inventory balance chart
         st.markdown("#### Stock Availability vs Allocation")
@@ -225,7 +228,7 @@ with tab3:
             title="Material Inventory Balances (First 25 Materials)",
             labels={"value": "Quantity", "variable": "Status"}
         )
-        st.plotly_chart(fig_inv, use_container_width=True)
+        st.plotly_chart(fig_inv, width="stretch")
 
 # TAB 4: MACHINE CALENDARS
 with tab4:
@@ -234,13 +237,13 @@ with tab4:
     if not cal_df.empty:
         mach_filter = st.selectbox("Select Machine for Calendar Inspection", options=sorted(cal_df["machine_id"].unique()))
         m_cal = cal_df[cal_df["machine_id"] == mach_filter]
-        st.dataframe(m_cal, use_container_width=True)
+        st.dataframe(m_cal, width="stretch")
 
 # TAB 5: MASTER DATA EXPLORER
 with tab5:
     st.subheader("Master Datasets")
     table_choice = st.selectbox("Select Table", options=list(data.keys()))
     if table_choice in data and not data[table_choice].empty:
-        st.dataframe(data[table_choice], use_container_width=True)
+        st.dataframe(data[table_choice], width="stretch")
         st.caption(f"Total Rows: {len(data[table_choice])}")
 
