@@ -1,0 +1,54 @@
+{
+  "makespan_hours": 1778.35,
+  "makespan_days": 74.1,
+  "earliest_start": "2026-11-02T06:00:00",
+  "latest_end": "2027-01-15T08:21:00",
+  "total_orders": 500,
+  "orders_scheduled": 500,
+  "on_time_orders": 105,
+  "on_time_delivery_pct": 21.0,
+  "delayed_orders": 395,
+  "average_lateness_hours": 397.29,
+  "maximum_lateness_hours": 1293.55,
+  "productive_utilization_pct": 8.09,
+  "changeover_pct": 1.84,
+  "idle_pct": 90.07,
+  "total_operating_cost_usd": 382705.88,
+  "workcenter_breakdown": {
+    "ASSEMBLY_LINE": {
+      "operations_count": 300,
+      "total_run_hours": 321.5,
+      "total_setup_hours": 83.2
+    },
+    "CNC_MACHINING": {
+      "operations_count": 200,
+      "total_run_hours": 213.1,
+      "total_setup_hours": 0.0
+    },
+    "CUTTING_BAY": {
+      "operations_count": 400,
+      "total_run_hours": 351.0,
+      "total_setup_hours": 143.5
+    },
+    "DRILL_PRESS": {
+      "operations_count": 100,
+      "total_run_hours": 113.0,
+      "total_setup_hours": 0.0
+    },
+    "QUALITY_LAB": {
+      "operations_count": 400,
+      "total_run_hours": 575.3,
+      "total_setup_hours": 116.5
+    },
+    "SURFACE_FINISH": {
+      "operations_count": 400,
+      "total_run_hours": 525.8,
+      "total_setup_hours": 159.8
+    },
+    "THERMAL_CELL": {
+      "operations_count": 200,
+      "total_run_hours": 231.4,
+      "total_setup_hours": 27.0
+    }
+  }
+}
