@@ -162,9 +162,12 @@ def run_pipeline(
     dfs["operation_schedule"] = schedules_df
     dfs["ground_truth"] = ground_truth_df
 
-    # Export CSVs and SQLite
+    # Export CSVs, JSON, and SQLite
     for name, df in dfs.items():
         df.to_csv(os.path.join(data_dir, f"{name}.csv"), index=False)
+
+    # Export ground_truth.json specifically as requested by Step 7
+    ground_truth_df.to_json(os.path.join(data_dir, "ground_truth.json"), orient="records", indent=2)
 
     import sqlite3
     db_path = os.path.join(data_dir, "factory_schedule.db")
